@@ -18,6 +18,7 @@ class Task extends Model
         'description',
         'due_date',
         'assigned_user_id',
+        'created_by',
         'priority',
         'status',
         'corrective_action',
@@ -37,6 +38,11 @@ class Task extends Model
     public function assignedUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_user_id');
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function activityLogs(): HasMany

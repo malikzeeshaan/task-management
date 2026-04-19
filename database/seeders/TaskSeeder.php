@@ -13,6 +13,7 @@ class TaskSeeder extends Seeder
     public function run(): void
     {
         $userIds = User::pluck('id')->toArray();
+        $adminId = $userIds[0]; // Admin User is always first
 
         $tasks = [
             // Pending — due in the future
@@ -150,7 +151,7 @@ class TaskSeeder extends Seeder
         ];
 
         foreach ($tasks as $task) {
-            Task::create($task);
+            Task::create(array_merge($task, ['created_by' => $adminId]));
         }
     }
 }

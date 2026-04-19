@@ -56,14 +56,17 @@ class TaskController extends Controller
 
     public function show(Task $task): View
     {
-        $task->load(['assignedUser', 'activityLogs.user']);
+        $task->load(['assignedUser', 'createdBy', 'activityLogs.user']);
 
         return view('tasks.show', compact('task'));
     }
 
     public function store(StoreTaskRequest $request): RedirectResponse
     {
-        Task::create($request->validated());
+        Task::create([
+            ...$request->validated(),
+            'created_by' => 1, // placeholder until auth is added
+        ]);
 
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
     }

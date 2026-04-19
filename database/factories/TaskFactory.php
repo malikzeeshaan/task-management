@@ -16,6 +16,7 @@ class TaskFactory extends Factory
             'description'      => fake()->paragraph(),
             'due_date'         => fake()->dateTimeBetween('now', '+30 days')->format('Y-m-d'),
             'assigned_user_id' => User::factory(),
+            'created_by'       => User::factory(),
             'priority'         => fake()->randomElement(TaskPriority::cases())->value,
             'status'           => TaskStatus::Pending->value,
             'corrective_action' => null,

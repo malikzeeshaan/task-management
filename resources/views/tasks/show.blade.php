@@ -33,6 +33,9 @@
                     <dt class="col-sm-4 text-muted">Assigned To</dt>
                     <dd class="col-sm-8">{{ $task->assignedUser->name }}</dd>
 
+                    <dt class="col-sm-4 text-muted">Created By</dt>
+                    <dd class="col-sm-8">{{ $task->createdBy->name }}</dd>
+
                     <dt class="col-sm-4 text-muted">Due Date</dt>
                     <dd class="col-sm-8">
                         {{ $task->due_date->format('d M Y') }}

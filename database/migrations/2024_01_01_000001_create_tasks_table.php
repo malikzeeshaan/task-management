@@ -14,6 +14,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->date('due_date');
             $table->foreignId('assigned_user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->enum('status', ['pending', 'completed', 'non_compliant'])->default('pending');
             $table->text('corrective_action')->nullable();
