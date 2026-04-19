@@ -18,6 +18,14 @@ return new class extends Migration
             $table->enum('status', ['pending', 'completed', 'non_compliant'])->default('pending');
             $table->text('corrective_action')->nullable();
             $table->timestamps();
+
+            // Single-column indexes for common filter queries
+            $table->index('status');
+            $table->index('due_date');
+
+            // Composite indexes for dashboard filter combinations
+            $table->index(['status', 'due_date']);
+            $table->index(['assigned_user_id', 'status']);
         });
     }
 

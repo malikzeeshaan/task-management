@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('new_status');
             $table->text('notes')->nullable();
             $table->timestamps();
+
+            // Indexes for lookups by task and by user
+            $table->index('task_id');
+            $table->index('user_id');
         });
     }
 
