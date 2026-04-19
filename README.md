@@ -18,7 +18,7 @@ A compliance task management system built with Laravel 13. Site managers can cre
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/malikzeeshaan/task-management.git
 cd task-management
 ```
 
