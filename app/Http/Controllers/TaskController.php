@@ -18,7 +18,7 @@ class TaskController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Task::with('assignedUser')->orderBy('due_date');
+        $query = Task::with('assignedUser');
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -34,7 +34,13 @@ class TaskController extends Controller
             $query->overdue();
         }
 
-        $tasks = $query->get();
+        match($request->sort) {
+            'updated' => $query->orderByDesc('updated_at'),
+            'created' => $query->orderByDesc('created_at'),
+            default   => $query->orderBy('due_date')->orderByDesc('updated_at'),
+        };
+
+        $tasks = $query->paginate(10)->withQueryString();
         $users = User::orderBy('name')->get();
 
         return view('tasks.index', compact('tasks', 'users'));
@@ -42,11 +48,17 @@ class TaskController extends Controller
 
     public function create(): View
     {
-        $users    = User::orderBy('name')->get();
-        $statuses = TaskStatus::cases();
+        $users      = User::orderBy('name')->get();
         $priorities = TaskPriority::cases();
 
-        return view('tasks.create', compact('users', 'statuses', 'priorities'));
+        return view('tasks.create', compact('users', 'priorities'));
+    }
+
+    public function show(Task $task): View
+    {
+        $task->load(['assignedUser', 'activityLogs.user']);
+
+        return view('tasks.show', compact('task'));
     }
 
     public function store(StoreTaskRequest $request): RedirectResponse
@@ -77,9 +89,12 @@ class TaskController extends Controller
         ]);
 
         return response()->json([
-            'success'    => true,
-            'new_status' => $task->status->label(),
-            'badge_class' => $task->status->badgeClass(),
+            'success'         => true,
+            'status'          => $task->status->value,
+            'new_status'      => $task->status->label(),
+            'badge_class'     => $task->status->badgeClass(),
+            'old_status'      => TaskStatus::from($oldStatus)->label(),
+            'old_badge_class' => TaskStatus::from($oldStatus)->badgeClass(),
         ]);
     }
 }
